@@ -7,7 +7,7 @@ function init() {
         zoom: 10
     });
 
-    var WikimapiaLayer = function () {
+    var AtlasLayer = function () {
         var layer = new ymaps.Layer('%z\\tile-%x-%y.jpg', {tileTransparent: true});
         // layer.getZoomRange = function (point) {
         //     return [10, 14];
@@ -16,13 +16,13 @@ function init() {
     };
 
     // Добавим слой под ключом
-    ymaps.layer.storage.add('wiki#aerial', WikimapiaLayer);
+    ymaps.layer.storage.add('custom#AtlasLayer', AtlasLayer);
     // Создадим тип карты, состоящий из слоёв 'mq#aerial' и 'yandex#skeleton'
-    var wikimapiaType = new ymaps.MapType('Wi + Ya', ['yandex#satellite', 'wiki#aerial']);
+    var atlasType = new ymaps.MapType('Wi + Ya', ['yandex#satellite', 'custom#AtlasLayer']);
     // Добавим в хранилище типов карты
-    ymaps.mapType.storage.add('wi_ya#hybrid', wikimapiaType);
+    ymaps.mapType.storage.add('custom#AtlasLayer', atlasType);
     // Теперь мы можем задавать наш тип карты любой карте
-    myMap.setType('wi_ya#hybrid');
+    myMap.setType('custom#AtlasLayer');
 
     // Сравним положение, вычисленное по ip пользователя и
     // положение, вычисленное средствами браузера.
