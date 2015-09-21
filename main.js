@@ -17,13 +17,13 @@ function init() {
     ymaps.layer.storage.add('vc#aerial', WikimapiaLayer);
 
     // Добавим слой под ключом
-    //ymaps.layer.storage.add('wiki#aerial', WikimapiaLayer);
+    ymaps.layer.storage.add('wiki#aerial', WikimapiaLayer);
     // Создадим тип карты, состоящий из слоёв 'mq#aerial' и 'yandex#skeleton'
     var wikimapiaType = new ymaps.MapType('Wi + Ya', ['yandex#satellite', 'wiki#aerial']);
     // Добавим в хранилище типов карты
-    ymaps.mapType.storage.add('wi_ya#hybrid', wikimapiaType);
     // Теперь мы можем задавать наш тип карты любой карте
     //myMap.setType('wi_ya#hybrid');
+    ymaps.mapType.storage.add('wi_ya#hybrid', wikimapiaType);
 
     var typeSelector = myMap.controls.get('typeSelector');
     typeSelector.addMapType('wi_ya#hybrid', 26);
