@@ -9,7 +9,8 @@ var DEFAULT_PARAMS = {lat: 44.68831017, lon: 34.4029205, zoom: 10};
  * @constructor
  */
 function App() {
-    this._map = this._initMap();
+    var params = this._parseUrl();
+    this._map = this._initMap(params);
     this._map.events.add('boundschange', this._saveLocation.bind(this));
     this._map.events.add('typechange', this._saveLocation.bind(this));
 
@@ -18,18 +19,20 @@ function App() {
     typeSelector.addMapType(this._addMercatorLayer('http://95.110.199.154/tilesterra/%z/%x/%y.png', 'terramap'), 27);
     typeSelector.addMapType(this._wikimapia('http://%host%.wikimapia.org/?x=%x&y=%y&zoom=%z&r=0&type=hybrid&lng=1'), 28);
 
-    var params = this._parseUrl();
     if (params.type) {
         this._map.setType(params.type);
     }
 };
 
 /**
+ * @param {Object} params
+ * @param {Number} params.zoom
+ * @param {Number} params.lon
+ * @param {Number} params.lat
  * @returns {ymaps.Map}
  * @private
  */
-App.prototype._initMap = function () {
-    var params = this._parseUrl();
+App.prototype._initMap = function (params) {
     var map = new ymaps.Map('map', {
         center: [params.lon, params.lat],
         zoom: params.zoom
@@ -142,18 +145,7 @@ App.prototype._parseUrl = function () {
 /**
  * @param {ymaps.Event} event
  */
-App.prototype._saveLocation = function (event) {
-    // Будем отслеживать изменение уровня масштабирования карты
-    //var z = 'oldZoom';
-    //if (event.get('newZoom') != event.get('oldZoom')) {
-    //    z = 'newZoom';
-    //}
-    //
-    //var c = 'oldCenter';
-    //if (event.get('newCenter') != event.get('oldCenter')) {
-    //    c = 'newCenter';
-    //}
-
+App.prototype._saveLocation = function () {
     document.location.hash = '#!zoom=%z&lat=%lat&lon=%lon&type=%type'
         .replace('%z', this._map.getZoom())
         .replace('%lat', this._map.getCenter()[1])
