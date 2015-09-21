@@ -11,7 +11,7 @@ var DEFAULT_PARAMS = {lat: 44.68831017, lon: 34.4029205, zoom: 10};
 function App() {
     this._map = this._initMap();
     this._map.events.add('boundschange', this._saveLocation.bind(this));
-    this._map.events.add('typechange', this._saveLocation.bind(this));
+    //this._map.events.add('typechange', this._saveLocation.bind(this));
 
     var typeSelector = this._map.controls.get('typeSelector');
     typeSelector.addMapType(this._addLayer('east-crimea/%z/tile-%x-%y.jpg', 'atlas'), 26);
@@ -29,9 +29,9 @@ App.prototype._initMap = function () {
         zoom: params.zoom
     });
 
-    if (params.type) {
-        map.setType(params.type);
-    }
+    //if (params.type) {
+    //    map.setType(params.type);
+    //}
 
     return map;
 };
