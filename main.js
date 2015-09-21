@@ -8,14 +8,12 @@ function init() {
     });
 
     var WikimapiaLayer = function () {
-        var layer = new ymaps.Layer('%z\\tile-%x-%y.jpg', {tileTransparent: true});
+        var layer = new ymaps.Layer('east-crimea/%z/tile-%x-%y.jpg', {tileTransparent: true});
         // layer.getZoomRange = function (point) {
         //     return [10, 14];
         // };
         return layer;
     };
-    ymaps.layer.storage.add('vc#aerial', WikimapiaLayer);
-
     // Добавим слой под ключом
     ymaps.layer.storage.add('wiki#aerial', WikimapiaLayer);
     // Создадим тип карты, состоящий из слоёв 'mq#aerial' и 'yandex#skeleton'
