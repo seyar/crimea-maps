@@ -24,7 +24,7 @@ App.prototype._addLayer = function (tileUrlTemplate, key) {
     // Добавим слой в сторадж слоев
     ymaps.layer.storage.add(key + '#hybrid', Layer);
     // Создадим тип карты, состоящий из других слоёв
-    var Type = new ymaps.MapType(key.toUpperCase(), ['yandex#satellite', key + '#aerial']);
+    var Type = new ymaps.MapType(key.toUpperCase(), ['yandex#satellite', key + '#hybrid']);
     // Добавим в хранилище типов карты
     ymaps.mapType.storage.add(key + '#hybrid', Type);
 
@@ -42,7 +42,7 @@ App.prototype._addMercatorLayer = function (tileUrlTemplate, key) {
     // Добавим слой в сторадж слоев
     ymaps.layer.storage.add(key + '#hybrid', Layer);
     // Создадим тип карты, состоящий из других слоёв
-    var Type = new ymaps.MapType(key.toUpperCase(), ['yandex#satellite', key + '#aerial']);
+    var Type = new ymaps.MapType(key.toUpperCase(), ['yandex#satellite', key + '#hybrid']);
     // Добавим в хранилище типов карты
     ymaps.mapType.storage.add(key + '#hybrid', Type);
 
