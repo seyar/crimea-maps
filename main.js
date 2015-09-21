@@ -17,6 +17,11 @@ function App() {
     typeSelector.addMapType(this._addLayer('east-crimea/%z/tile-%x-%y.jpg', 'atlas'), 26);
     typeSelector.addMapType(this._addMercatorLayer('http://95.110.199.154/tilesterra/%z/%x/%y.png', 'terramap'), 27);
     typeSelector.addMapType(this._wikimapia('http://%host%.wikimapia.org/?x=%x&y=%y&zoom=%z&r=0&type=hybrid&lng=1'), 28);
+
+    var params = this._parseUrl();
+    if (params.type) {
+        this._map.setType(params.type);
+    }
 };
 
 /**
@@ -29,10 +34,6 @@ App.prototype._initMap = function () {
         center: [params.lon, params.lat],
         zoom: params.zoom
     });
-
-    if (params.type) {
-        map.setType(params.type);
-    }
 
     return map;
 };
