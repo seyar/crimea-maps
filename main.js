@@ -11,7 +11,7 @@ var DEFAULT_PARAMS = {lat: 44.68831017, lon: 34.4029205, zoom: 10};
 function App() {
     this._map = this._initMap();
     this._map.events.add('boundschange', this._saveLocation.bind(this));
-    //this._map.events.add('typechange', this._saveLocation.bind(this));
+    this._map.events.add('typechange', this._saveLocation.bind(this));
 
     var typeSelector = this._map.controls.get('typeSelector');
     typeSelector.addMapType(this._addLayer('east-crimea/%z/tile-%x-%y.jpg', 'atlas'), 26);
@@ -30,9 +30,9 @@ App.prototype._initMap = function () {
         zoom: params.zoom
     });
 
-    //if (params.type) {
-    //    map.setType(params.type);
-    //}
+    if (params.type) {
+        map.setType(params.type);
+    }
 
     return map;
 };
@@ -89,7 +89,6 @@ App.prototype._addMercatorLayer = function (tileUrlTemplate, key) {
 /**
  *
  * @param {String} tileUrlTemplate
- * @param {String} key
  * @returns {String}
  */
 App.prototype._wikimapia = function (tileUrlTemplate) {
@@ -144,19 +143,19 @@ App.prototype._parseUrl = function () {
  */
 App.prototype._saveLocation = function (event) {
     // Будем отслеживать изменение уровня масштабирования карты
-    var z = 'oldZoom';
-    if (event.get('newZoom') != event.get('oldZoom')) {
-        z = 'newZoom';
-    }
-
-    var c = 'oldCenter';
-    if (event.get('newCenter') != event.get('oldCenter')) {
-        c = 'newCenter';
-    }
+    //var z = 'oldZoom';
+    //if (event.get('newZoom') != event.get('oldZoom')) {
+    //    z = 'newZoom';
+    //}
+    //
+    //var c = 'oldCenter';
+    //if (event.get('newCenter') != event.get('oldCenter')) {
+    //    c = 'newCenter';
+    //}
 
     document.location.hash = '#!zoom=%z&lat=%lat&lon=%lon&type=%type'
-        .replace('%z', event.get(z))
-        .replace('%lat', event.get(c)[1])
-        .replace('%lon', event.get(c)[0])
+        .replace('%z', this._map.getZoom())
+        .replace('%lat', this._map.getCenter()[1])
+        .replace('%lon', this._map.getCenter()[0])
         .replace('%type', this._map.getType());
 };
