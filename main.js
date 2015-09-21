@@ -1,53 +1,50 @@
-ymaps.ready(init);
+ymaps.ready(function () {
+    new App();
+});
 
-function init() {
-
-    var myMap = new ymaps.Map('map', {
+/**
+ *
+ * @constructor
+ */
+function App() {
+    var map = new ymaps.Map('map', {
         center: [44.68831017, 34.4029205],
         zoom: 10
     });
+    var typeSelector = map.controls.get('typeSelector');
+    typeSelector.addMapType(this._addLayer('east-crimea/%z/tile-%x-%y.jpg', 'wi-ya'), 26);
+    typeSelector.addMapType(this._addMercatorLayer('http://95.110.199.154/tilesterra/%z/%x/%y.png', 'terra-ya'), 27);
+};
 
-    var WikimapiaLayer = function () {
-        var layer = new ymaps.Layer('east-crimea/%z/tile-%x-%y.jpg', {tileTransparent: true});
-        // layer.getZoomRange = function (point) {
-        //     return [10, 14];
-        // };
+App.prototype._addLayer = function (tileUrlTemplate, key) {
+    var Layer = function () {
+        var layer = new ymaps.Layer(tileUrlTemplate, {tileTransparent: true});
         return layer;
     };
-    // Добавим слой под ключом
-    ymaps.layer.storage.add('wiki#aerial', WikimapiaLayer);
-    // Создадим тип карты, состоящий из слоёв 'mq#aerial' и 'yandex#skeleton'
-    var wikimapiaType = new ymaps.MapType('Wi + Ya', ['yandex#satellite', 'wiki#aerial']);
+    // Добавим слой в сторадж слоев
+    ymaps.layer.storage.add(key + '#hybrid', Layer);
+    // Создадим тип карты, состоящий из других слоёв
+    var Type = new ymaps.MapType(key.toUpperCase(), ['yandex#satellite', key + '#aerial']);
     // Добавим в хранилище типов карты
-    // Теперь мы можем задавать наш тип карты любой карте
-    //myMap.setType('wi_ya#hybrid');
-    ymaps.mapType.storage.add('wi_ya#hybrid', wikimapiaType);
+    ymaps.mapType.storage.add(key + '#hybrid', Type);
 
-    var typeSelector = myMap.controls.get('typeSelector');
-    typeSelector.addMapType('wi_ya#hybrid', 26);
+    return key + '#hybrid';
+};
 
-    //var geolocation = ymaps.geolocation;
-    // Сравним положение, вычисленное по ip пользователя и
-    // положение, вычисленное средствами браузера.
-    // geolocation.get({
-    //     provider: 'yandex',
-    //     mapStateAutoApply: true
-    // }).then(function (result) {
-    //     // Красным цветом пометим положение, вычисленное через ip.
-    //     result.geoObjects.options.set('preset', 'islands#redCircleIcon');
-    //     result.geoObjects.get(0).properties.set({
-    //         balloonContentBody: 'Мое местоположение'
-    //     });
-    //     myMap.geoObjects.add(result.geoObjects);
-    // });
+App.prototype._addMercatorLayer = function (tileUrlTemplate, key) {
+    var Layer = function () {
+        var layer = new ymaps.Layer(tileUrlTemplate, {
+            tileTransparent: true,
+            projection: ymaps.projection.sphericalMercator
+        });
+        return layer;
+    };
+    // Добавим слой в сторадж слоев
+    ymaps.layer.storage.add(key + '#hybrid', Layer);
+    // Создадим тип карты, состоящий из других слоёв
+    var Type = new ymaps.MapType(key.toUpperCase(), ['yandex#satellite', key + '#aerial']);
+    // Добавим в хранилище типов карты
+    ymaps.mapType.storage.add(key + '#hybrid', Type);
 
-    // geolocation.get({
-    //     provider: 'browser',
-    //     mapStateAutoApply: true
-    // }).then(function (result) {
-    //     // Синим цветом пометим положение, полученное через браузер.
-    //     // Если браузер не поддерживает эту функциональность, метка не будет добавлена на карту.
-    //     result.geoObjects.options.set('preset', 'islands#blueCircleIcon');
-    //     myMap.geoObjects.add(result.geoObjects);
-    // });
-}
+    return key + '#hybrid';
+};
