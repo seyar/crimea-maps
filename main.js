@@ -12,8 +12,8 @@ function App() {
         zoom: 10
     });
     var typeSelector = map.controls.get('typeSelector');
-    typeSelector.addMapType(this._addLayer('east-crimea/%z/tile-%x-%y.jpg', 'wi-ya'), 26);
-    typeSelector.addMapType(this._addMercatorLayer('http://95.110.199.154/tilesterra/%z/%x/%y.png', 'terra-ya'), 27);
+    typeSelector.addMapType(this._addLayer('east-crimea/%z/tile-%x-%y.jpg', 'atlas'), 26);
+    typeSelector.addMapType(this._addMercatorLayer('http://95.110.199.154/tilesterra/%z/%x/%y.png', 'terramap'), 27);
 };
 
 App.prototype._addLayer = function (tileUrlTemplate, key) {
@@ -22,13 +22,14 @@ App.prototype._addLayer = function (tileUrlTemplate, key) {
         return layer;
     };
     // Добавим слой в сторадж слоев
-    ymaps.layer.storage.add(key + '#hybrid', Layer);
+    var mapName = key + '#hybrid';
+    ymaps.layer.storage.add(mapName, Layer);
     // Создадим тип карты, состоящий из других слоёв
-    var Type = new ymaps.MapType(key.toUpperCase(), ['yandex#satellite', key + '#hybrid']);
+    var Type = new ymaps.MapType(key.toUpperCase(), ['yandex#satellite', mapName]);
     // Добавим в хранилище типов карты
-    ymaps.mapType.storage.add(key + '#hybrid', Type);
+    ymaps.mapType.storage.add(mapName, Type);
 
-    return key + '#hybrid';
+    return mapName;
 };
 
 App.prototype._addMercatorLayer = function (tileUrlTemplate, key) {
@@ -40,11 +41,12 @@ App.prototype._addMercatorLayer = function (tileUrlTemplate, key) {
         return layer;
     };
     // Добавим слой в сторадж слоев
-    ymaps.layer.storage.add(key + '#hybrid', Layer);
+    var mapName = key + '#hybrid';
+    ymaps.layer.storage.add(mapName, Layer);
     // Создадим тип карты, состоящий из других слоёв
-    var Type = new ymaps.MapType(key.toUpperCase(), ['yandex#satellite', key + '#hybrid']);
+    var Type = new ymaps.MapType(key.toUpperCase(), ['yandex#satellite', mapName]);
     // Добавим в хранилище типов карты
-    ymaps.mapType.storage.add(key + '#hybrid', Type);
+    ymaps.mapType.storage.add(mapName, Type);
 
-    return key + '#hybrid';
+    return mapName;
 };
