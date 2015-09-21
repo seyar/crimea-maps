@@ -16,6 +16,7 @@ function App() {
     var typeSelector = this._map.controls.get('typeSelector');
     typeSelector.addMapType(this._addLayer('east-crimea/%z/tile-%x-%y.jpg', 'atlas'), 26);
     typeSelector.addMapType(this._addMercatorLayer('http://95.110.199.154/tilesterra/%z/%x/%y.png', 'terramap'), 27);
+    typeSelector.addMapType(this._wikimapia('http://%host%.wikimapia.org/?x=%x&y=%y&zoom=%z&r=0&type=hybrid&lng=1'), 28);
 };
 
 /**
@@ -85,6 +86,39 @@ App.prototype._addMercatorLayer = function (tileUrlTemplate, key) {
     return mapName;
 };
 
+/**
+ *
+ * @param {String} tileUrlTemplate
+ * @param {String} key
+ * @returns {String}
+ */
+App.prototype._wikimapia = function (tileUrlTemplate) {
+    var WikimapiaLayer = function () {
+        var layer = new ymaps.Layer('', {
+            tileTransparent: true,
+            projection: ymaps.projection.sphericalMercator
+        });
+
+        layer.getTileUrl = function (tileNumber, tileZoom) {
+            var host = (tileNumber[0] % 4) + (tileNumber[1] % 4) * 4;
+            return tileUrlTemplate
+                .replace('%host%', 'i' + host)
+                .replace('%x', tileNumber[0])
+                .replace('%y', tileNumber[1])
+                .replace('%z', tileZoom);
+        };
+        return layer;
+    };
+
+    // Добавим слой под ключом
+    ymaps.layer.storage.add('wiki#aerial', WikimapiaLayer);
+    // Создадим тип карты, состоящий из слоёв 'mq#aerial' и 'yandex#skeleton'
+    var wikimapiaType = new ymaps.MapType('Wikimapia', ['yandex#satellite', 'wiki#aerial']);
+    // Добавим в хранилище типов карты
+    ymaps.mapType.storage.add('wi_ya#hybrid', wikimapiaType);
+
+    return 'wi_ya#hybrid';
+};
 /**
  * @returns {Object}
  */
