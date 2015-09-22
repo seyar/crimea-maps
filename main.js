@@ -16,7 +16,7 @@ function App() {
 
     var typeSelector = this._map.controls.get('typeSelector');
     typeSelector.addMapType(this._addLayer('east-crimea/%z/tile-%x-%y.jpg', 'Атлас1'), 25);
-    typeSelector.addMapType(this._addLayer('kartatlas/%z/tile-%x-%y.jpg', 'Атлас2'), 26);
+    typeSelector.addMapType(this._addLayer('kartatlas/%z/tile-%x-%y.png', 'Атлас2'), 26);
     typeSelector.addMapType(this._addMercatorLayer('http://95.110.199.154/tilesterra/%z/%x/%y.png', 'Terra Map'), 27);
     typeSelector.addMapType(this._wikimapia('http://%host%.wikimapia.org/?x=%x&y=%y&zoom=%z&r=0&type=hybrid&lng=1'), 28);
 
