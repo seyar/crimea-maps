@@ -2,18 +2,19 @@ ymaps.ready(function () {
     new App();
 });
 
-var DEFAULT_PARAMS = {ll: [34.4029205, 44.68831017], zoom: 10, type: 'yandex#map'};
+var DEFAULT_PARAMS = {ll: '34.4029205,44.68831017', zoom: 10, type: 'yandex#map'};
 
 /**
  *
  * @constructor
  */
 function App() {
-    var params = this._getState();
+    var state = new State();
+    var params = state._getState();
     var map = this._initMap(params);
 
-    map.events.add('boundschange', this._onBoundsChange.bind(this, map));
-    map.events.add('typechange', this._onBoundsChange.bind(this, map));
+    map.events.add('boundschange', this._onBoundsChange.bind(state, map));
+    map.events.add('typechange', this._onBoundsChange.bind(state, map));
 
     var typeSelector = map.controls.get('typeSelector');
     typeSelector.addMapType(this._addLayer('east-crimea/%z/tile-%x-%y.jpg', 'Атлас1'), 25);
@@ -47,13 +48,12 @@ App.prototype = {
     },
 
     /**
-     *
-     * @private
+     * Bounds change callback
      */
     _onBoundsChange: function (map) {
         var options = {
             zoom: map.getZoom(),
-            ll: map.getCenter(),
+            ll: map.getCenter().join(','),
             type: map.getType()
         };
         this._saveState(options);
@@ -106,8 +106,7 @@ App.prototype = {
         ymaps.mapType.storage.add(mapName, Type);
 
         return mapName;
-    }
-    ,
+    },
 
     /**
      *
@@ -140,13 +139,29 @@ App.prototype = {
         ymaps.mapType.storage.add('wi_ya#hybrid', wikimapiaType);
 
         return 'wi_ya#hybrid';
-    },
+    }
+};
 
+/**
+ * Class for working with state
+ * @constructor
+ */
+function State() {
+
+}
+
+State.prototype = {
     /**
      * @returns {Object}
      */
     _getState: function () {
-        var query = document.location.hash.replace(/^\#!/, '');
+        var query = decodeURIComponent(document.location.search.replace(/^\?/, ''));
+        var state = window.history.state;
+
+        if (state) {
+            return state;
+        }
+
         var args = query.split('&');
         if (!args) {
             return DEFAULT_PARAMS
@@ -169,9 +184,10 @@ App.prototype = {
      * @param {String} options.type
      */
     _saveState: function (options) {
-        document.location.hash = '#!zoom=%z&ll=%ll&type=%type'
+        var search = '?zoom=%z&ll=%ll&type=%type'
             .replace('%z', options.zoom)
             .replace('%ll', options.ll)
-            .replace('%type', options.type);
+            .replace('%type', encodeURIComponent(options.type));
+        window.history.pushState(options, null, search);
     }
 };
