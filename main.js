@@ -41,7 +41,8 @@ App.prototype = {
     _initMap: function (params) {
         var map = new ymaps.Map('map', {
             center: params.ll.split(','),
-            zoom: params.zoom
+            zoom: params.zoom,
+            controls: ['zoomControl', 'searchControl', 'typeSelector', 'rulerControl', 'geolocationControl']
         });
 
         return map;
@@ -135,7 +136,7 @@ App.prototype = {
         ymaps.layer.storage.add('wiki#aerial', WikimapiaLayer);
 
         var wikimapiaType = new ymaps.MapType('Wikimapia', ['yandex#satellite', 'wiki#aerial']);
-        
+
         ymaps.mapType.storage.add('wi_ya#hybrid', wikimapiaType);
 
         return 'wi_ya#hybrid';
