@@ -71,12 +71,12 @@ App.prototype = {
             var layer = new ymaps.Layer(tileUrlTemplate, {tileTransparent: true});
             return layer;
         };
-        // Добавим слой в сторадж слоев
+
         var mapName = key + '#hybrid';
         ymaps.layer.storage.add(mapName, Layer);
-        // Создадим тип карты, состоящий из других слоёв
+
         var Type = new ymaps.MapType(key.toUpperCase(), ['yandex#satellite', mapName]);
-        // Добавим в хранилище типов карты
+
         ymaps.mapType.storage.add(mapName, Type);
 
         return mapName;
@@ -97,12 +97,12 @@ App.prototype = {
             });
             return layer;
         };
-        // Добавим слой в сторадж слоев
+
         var mapName = key + '#hybrid';
         ymaps.layer.storage.add(mapName, Layer);
-        // Создадим тип карты, состоящий из других слоёв
+
         var Type = new ymaps.MapType(key.toUpperCase(), ['yandex#satellite', mapName]);
-        // Добавим в хранилище типов карты
+
         ymaps.mapType.storage.add(mapName, Type);
 
         return mapName;
@@ -131,11 +131,11 @@ App.prototype = {
             return layer;
         };
 
-        // Добавим слой под ключом
+
         ymaps.layer.storage.add('wiki#aerial', WikimapiaLayer);
-        // Создадим тип карты, состоящий из слоёв 'mq#aerial' и 'yandex#skeleton'
+
         var wikimapiaType = new ymaps.MapType('Wikimapia', ['yandex#satellite', 'wiki#aerial']);
-        // Добавим в хранилище типов карты
+        
         ymaps.mapType.storage.add('wi_ya#hybrid', wikimapiaType);
 
         return 'wi_ya#hybrid';
@@ -146,9 +146,7 @@ App.prototype = {
  * Class for working with state
  * @constructor
  */
-function State() {
-
-}
+function State() {}
 
 State.prototype = {
     /**
